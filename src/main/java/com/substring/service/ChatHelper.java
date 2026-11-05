@@ -1,30 +1,34 @@
 package com.substring.service;
 
-import dev.langchain4j.data.message.AiMessage;
-import dev.langchain4j.data.message.ImageContent;
-import dev.langchain4j.data.message.UserMessage;
+import com.substring.dto.StudyPlan;
 import dev.langchain4j.model.chat.ChatModel;
-import dev.langchain4j.model.chat.response.ChatResponse;
+import dev.langchain4j.model.chat.StreamingChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
+import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
+import dev.langchain4j.service.AiServices;
+import dev.langchain4j.service.TokenStream;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 public class ChatHelper {
-    public static String getResponse(String input){
-        List<ChatResponse> responses = new ArrayList<>();
-        ChatModel chatModel = OpenAiChatModel.builder()
+    public static TokenStream getResponse(String input){
+        StreamingChatModel chatModel = OpenAiStreamingChatModel.builder()
                 .apiKey(System.getenv("NVIDIA_API_KEY"))
                 .baseUrl("https://integrate.api.nvidia.com/v1")
                 .modelName("nvidia/nemotron-3.5-super-vl-120b-a12b")
                 .build();
 
-       UserMessage userMessage = UserMessage.from(
-               ImageContent.from("https://picsum.photos/seed/picsum/200/300")
-       );
+        BotAssistant botAssistant = AiServices.create(BotAssistant.class, chatModel);
+        return botAssistant.chatWithBot(input);
+    }
 
-        ChatResponse chatResponse = chatModel.chat(userMessage);
-        responses.add(chatResponse);
-        return chatResponse.aiMessage().text();
+    public static TokenStream getStudyPlan(String topic, Optional<String> timeframe){
+        StreamingChatModel chatModel = OpenAiStreamingChatModel.builder()
+                .apiKey(System.getenv("NVIDIA_API_KEY"))
+                .baseUrl("https://integrate.api.nvidia.com/v1")
+                .modelName("nvidia/nemotron-3.5-super-vl-120b-a12b")
+                .build();
+        StudyPlannerAssistant studyPlannerAssistant = AiServices.create(StudyPlannerAssistant.class, chatModel);
+        return studyPlannerAssistant.getStudyPlan(topic, timeframe);
     }
 }
