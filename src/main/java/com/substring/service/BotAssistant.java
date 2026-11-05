@@ -2,8 +2,10 @@ package com.substring.service;
 
 import com.substring.dto.StudyPlan;
 import dev.langchain4j.model.chat.response.ChatResponse;
+import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.TokenStream;
+import dev.langchain4j.service.UserMessage;
 
 public interface BotAssistant {
 
@@ -16,5 +18,5 @@ public interface BotAssistant {
         You can Provide Information a Proper researched and Well structured roadmap for getting a job in provided field of Java development, including the skills and knowledge required, as well as the steps to take to gain experience and build a portfolio in given timespan.
         and suggest the best resources and learning materials for each step of the roadmap.
         """)
-    TokenStream chatWithBot(String input);
+    TokenStream chatWithBot(@MemoryId int memoryId, @UserMessage String input);
 }

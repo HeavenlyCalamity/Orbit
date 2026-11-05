@@ -1,6 +1,7 @@
 package com.substring.service;
 
 import com.substring.dto.StudyPlan;
+import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.TokenStream;
 import dev.langchain4j.service.UserMessage;
 import dev.langchain4j.service.V;
@@ -14,5 +15,5 @@ public interface StudyPlannerAssistant {
         {{topic}} in {{timeframe}} if time duration is null, the default will be 6 months.
         You can Provide Information a Proper researched and Well structured roadmap for getting a job in provided field.
         """)
-    TokenStream getStudyPlan(@V("topic") String topic, @V("timeframe") Optional<String> timeframe);
+    TokenStream getStudyPlan(@MemoryId int memoryId, @V("topic") String topic, @V("timeframe") Optional<String> timeframe);
 }
