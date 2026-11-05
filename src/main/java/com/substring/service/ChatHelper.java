@@ -1,6 +1,9 @@
 package com.substring.service;
 
 import com.substring.dto.StudyPlan;
+import com.substring.tools.Calculator;
+import com.substring.tools.FileWriterTool;
+import com.substring.tools.TimeAndDateTool;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.chat.StreamingChatModel;
@@ -24,6 +27,10 @@ public class ChatHelper {
             .chatMemoryProvider(memoryId ->
                     MessageWindowChatMemory.withMaxMessages(25)
             )
+            .tools(new Calculator(),
+                    new TimeAndDateTool(),
+                    new FileWriterTool()
+            )
             .build();
     static StudyPlannerAssistant studyPlannerAssistant = AiServices.builder(StudyPlannerAssistant.class)
             .streamingChatModel(chatModel)
@@ -31,16 +38,14 @@ public class ChatHelper {
                     MessageWindowChatMemory.withMaxMessages(25)
             )
             .build();
+
+
+
     public static TokenStream getResponse(Integer conversationId, String input){
-
-
-
         return botAssistant.chatWithBot(conversationId, input);
     }
 
     public static TokenStream getStudyPlan(Integer conversationId, String topic, Optional<String> timeframe){
-
-
         return studyPlannerAssistant.getStudyPlan(conversationId, topic, timeframe);
     }
 }

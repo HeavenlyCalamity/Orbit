@@ -8,6 +8,7 @@ import dev.langchain4j.service.TokenStream;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -30,7 +31,7 @@ public class Main {
             if(readln.equals("1")){
                 IO.println("ChatBot: Hello! How can I assist you today?");
                 TokenStream tokenStream = ChatHelper.getResponse(conversationId, readln);
-                IO.println("ChatBot: " );
+                IO.print("ChatBot: " );
                 CompletableFuture<ChatResponse> future = new CompletableFuture<>();
                 tokenStream.onCompleteResponse(chatResponse -> {
                             IO.println();
@@ -70,7 +71,7 @@ public class Main {
             }
             else{
                 TokenStream tokenStream = ChatHelper.getResponse(conversationId, readln);
-                IO.println("ChatBot: " );
+                IO.print("ChatBot: ");
                 CompletableFuture<ChatResponse> future = new CompletableFuture<>();
                 tokenStream.onCompleteResponse(chatResponse -> {
                             IO.println();
